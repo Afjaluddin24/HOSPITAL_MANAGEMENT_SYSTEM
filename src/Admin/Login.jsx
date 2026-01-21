@@ -1,20 +1,55 @@
 import { useFormik } from 'formik'
 import React, { useState } from 'react'
 import { LoginSchema } from '../schemas';
+import axios from 'axios';
 
 const initialValues ={
-   loginRole:"",
+   Role:"",
    username:"",
    password:""
 };
 function Login() {
+
+  const [Buttonvalue,setButtonvalue] = useState("Login");
 
   const {values,errors,handleBlur,handleChange,handleSubmit,touched} = useFormik({
    initialValues:initialValues,
    validationSchema:LoginSchema,
 
    onSubmit: async(values) =>{
-      console.log(values);
+      if(values.Role == "Admin")
+      {
+        var requestData ={
+          Role:values.Role,
+          username:values.username,
+          password:values.password
+        }
+        setButtonvalue("Please Wait...");
+        console.log('Data is',requestData);
+        axios.post("",requestData)
+        .then(res =>{
+
+        })
+        .catch(err =>{
+            
+        })
+      }
+      else if(values.Role == "Doctor")
+      {
+        var requestData ={
+          username:values.username,
+          password:values.password
+        }
+        console.log('Data is',requestData);
+      }
+       else if(values.Role == "Receptionist")
+      {
+        var requestData ={
+          username:values.username,
+          password:values.password
+        }
+        console.log('Data is',requestData);
+      }
    }
 })
 
@@ -93,8 +128,8 @@ function Login() {
       </div>
       {/* Login Button */}
       <div className="d-grid">
-        <button type="submit" id="Login" className="btn btn-primary">
-          Login
+        <button type="submit" id="Login" disabled={Buttonvalue !== "Login"} className="btn btn-primary">
+          {Buttonvalue !== "Login"? <i className="fa-solid fa-spinner fa-spin me-2"></i>:"Login"}
         </button>
       </div>
       {/* Optional Links */}
