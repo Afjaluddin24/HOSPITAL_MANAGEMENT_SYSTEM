@@ -26,13 +26,13 @@ function Login() {
         }
         setButtonvalue("Please Wait...");
         console.log('Data is',requestData);
-        axios.post("",requestData)
-        .then(res =>{
-
-        })
-        .catch(err =>{
-            
-        })
+        postData("",requestData)
+        try {
+          
+        } catch (error) {
+          
+        }
+        
       }
       else if(values.Role == "Doctor")
       {
