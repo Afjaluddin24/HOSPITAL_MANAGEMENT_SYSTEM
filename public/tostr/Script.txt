@@ -1,0 +1,19 @@
+ <script>
+     function SuccessAlert(Message) {
+         toastr.success(Message);
+     }
+
+     function DangerAlert(Message) {
+         toastr.error(Message);
+     }
+
+     function WarningAlert(Message) {
+         toastr.warning(Message);
+     }
+
+     function InfoAlert(Message) {
+         toastr.info(Message);
+     }
+ </script>
+
+Layout Page past now
