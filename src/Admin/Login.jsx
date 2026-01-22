@@ -2,6 +2,7 @@ import { useFormik } from 'formik'
 import React, { useState } from 'react'
 import { LoginSchema } from '../schemas';
 import axios from 'axios';
+import { postData } from '../APIConfig/ConfigAPI';
 
 const initialValues ={
    Role:"",
@@ -26,11 +27,20 @@ function Login() {
         }
         setButtonvalue("Please Wait...");
         console.log('Data is',requestData);
-        postData("",requestData)
         try {
-          
+          const response = postData("Adminapi/Authenticate",requestData)
+          if(response.Status == "Ok")
+          {
+            console.log("Save",response.result);
+            setButtonvalue("Login");
+          }
+          else{
+             console.log("Error",response.result);
+            setButtonvalue("Login");
+          }
         } catch (error) {
-          
+            console.log("Error 2",error);
+           setButtonvalue("Login");
         }
         
       }
