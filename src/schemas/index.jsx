@@ -12,3 +12,7 @@ export const LoginSchema = Yup.object({
     username:Yup.string().required("required"),
     password:Yup.string().min(4).required("required")
 })
+
+export  const OtpSchema = Yup.object({
+    otp:Yup.string().length(6,"OTP must be 6 digits only").required("required")
+})

@@ -21,26 +21,30 @@ function Login() {
       if(values.Role == "Admin")
       {
         var requestData ={
-          Role:values.Role,
+          // Role:values.Role,
           username:values.username,
           password:values.password
         }
         setButtonvalue("Please Wait...");
         console.log('Data is',requestData);
         try {
-          const response = postData("Adminapi/Authenticate",requestData)
-          if(response.Status == "Ok")
+          const Apiresponse = await postData("Adminapi/Authenticate",requestData)
+          // console.log('Response is',Apiresponse);
+          if(Apiresponse.status === "Ok")
           {
-            console.log("Save",response.result);
-            setButtonvalue("Login");
+             alert(Apiresponse.result);
+             setTimeout(() => {
+                window.location.href = "/Verification"
+             }, 2000);
+             setButtonvalue("Login");
           }
           else{
-             console.log("Error",response.result);
+            alert(Apiresponse.result);
             setButtonvalue("Login");
           }
         } catch (error) {
-            console.log("Error 2",error);
-           setButtonvalue("Login");
+          console.log("Error occured",error);
+          setButtonvalue("Login");
         }
         
       }
