@@ -5,7 +5,6 @@ import axios from 'axios';
 import { postData } from '../APIConfig/ConfigAPI';
 
 const initialValues ={
-   Role:"",
    username:"",
    password:""
 };
@@ -18,9 +17,7 @@ function Login() {
    validationSchema:LoginSchema,
 
    onSubmit: async(values) =>{
-      if(values.Role == "Admin")
-      {
-        var requestData ={
+       var requestData ={
           // Role:values.Role,
           username:values.username,
           password:values.password
@@ -28,7 +25,7 @@ function Login() {
         setButtonvalue("Please Wait...");
         console.log('Data is',requestData);
         try {
-          const Apiresponse = await postData("Adminapi/Authenticate",requestData)
+          const Apiresponse = await postData("Authenticationapi/Authenticate",requestData)
           // console.log('Response is',Apiresponse);
           if(Apiresponse.status === "Ok")
           {
@@ -46,24 +43,6 @@ function Login() {
           console.log("Error occured",error);
           setButtonvalue("Login");
         }
-        
-      }
-      else if(values.Role == "Doctor")
-      {
-        var requestData ={
-          username:values.username,
-          password:values.password
-        }
-        console.log('Data is',requestData);
-      }
-       else if(values.Role == "Receptionist")
-      {
-        var requestData ={
-          username:values.username,
-          password:values.password
-        }
-        console.log('Data is',requestData);
-      }
    }
 })
 
@@ -84,26 +63,6 @@ function Login() {
   >
     <h2 className="text-center mb-4">Login</h2>
     <form onSubmit={handleSubmit} method="post">
-      <div className="mb-3">
-        <b htmlFor="loginRole" className="form-label">
-          Select Role <label className='text-danger'>{errors.loginRole && touched.loginRole ? errors.loginRole:null}</label>
-        </b>
-        &nbsp;
-        <label id="lblrole" className="text-danger" />
-        <select className="form-select" 
-          id="Role"
-          name="Role" 
-          value={values.Role}
-          onBlur={handleBlur} 
-          onChange={handleChange}>
-            <option value="" selected="" disabled="">
-              Select your role 
-            </option>
-            <option value="Admin">Admin</option>
-            <option value="Doctor">Doctor</option>
-            <option value="Receptionist">Receptionist</option>
-        </select>
-      </div>
       {/* Username */}
       <div className="mb-3">
         <b htmlFor="username" className="form-label">

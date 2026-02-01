@@ -8,7 +8,6 @@ export const ContactSchema = Yup.object({
 });
 
 export const LoginSchema = Yup.object({
-    Role:Yup.string().required("required"),
     username:Yup.string().required("required"),
     password:Yup.string().min(4).required("required")
 })

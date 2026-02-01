@@ -21,7 +21,7 @@ function Otpvarification() {
             var requestData = {
                 Otp:String(values.otp)
             }
-            const Apireponse = await postData("Adminapi/VerifyOtp",requestData);
+            const Apireponse = await postData("Authenticationapi/VerifyOtp",requestData);
             setButtonvalue("Please Wait...");
             try {
                 if(Apireponse.status === "Ok")
@@ -34,8 +34,8 @@ function Otpvarification() {
                     },2000);
                 }
                 else{
-                   setInitialValues("Verify OTP");
                    alert(Apireponse.result);
+                   setInitialValues("Verify OTP");
                 }
             } catch (error) {
                 console.log("Error occured",error);
