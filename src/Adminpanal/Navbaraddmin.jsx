@@ -1,6 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
 import { warningAlert } from '../../../../RECAT/garment_invetory_system/src/Message/SweetAlert';
+import { Link } from 'react-router-dom';
 
 function Navbaraddmin() {
 
@@ -28,12 +29,8 @@ function Navbaraddmin() {
            const remainingMs = expiryTime - currentTime;
            const remainingMinutes = Math.floor(remainingMs / 60000);
            const remainingSeconds = Math.floor((remainingMs % 60000) / 1000);
-           console.log(`Token expires in ${remainingMinutes} min ${remainingSeconds} sec`);
-
-           setTimeout(() => {
-             warningAlert("Session expired. Please login again.");
-           }, 2000);
-
+          //  console.log(`Token expires in ${remainingMinutes} min ${remainingSeconds} sec`);
+          
            setTimeout(() => {
              warningAlert("Session expired. Please login again.");
              localStorage.removeItem("Token");
@@ -44,14 +41,13 @@ function Navbaraddmin() {
   return (
     <>
        <nav
-  className="navbar navbar-expand-lg navbar-dark shadow"
-  style={{ background: "linear-gradient(90deg,#0d6efd,#0dcaf0)" }}
+  className="navbar navbar-expand-lg navbar-dark shadow bg-primary"
 >
   <div className="container-fluid">
     <a className="navbar-brand d-flex align-items-center" href="#">
       <img
-        src="https://cdn-icons-png.flaticon.com/512/2967/2967350.png"
-        width={42}
+        src="../Myimage/AdminLogo.png"
+        width={55}
         alt="Hospital Logo"
         style={{ marginRight: 8 }}
       />
@@ -67,24 +63,24 @@ function Navbaraddmin() {
     <div className="collapse navbar-collapse" id="menu">
       <ul className="navbar-nav ms-auto align-items-lg-center">
         <li className="nav-item">
-          <a className="nav-link active" href="#">
+          <Link  to="/Admin/Dashboard" className="nav-link active">
             <i className="fa fa-chart-line" /> Dashboard
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">
+          <Link  to="/Admin/Doctor" className="nav-link">
             <i className="fa fa-user-doctor" /> Doctors
-          </a>
+          </Link >
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">
+          <Link  to="/Admin/" className="nav-link">
             <i className="fa fa-user-nurse" /> Reception
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">
+          <Link  to="/Admin/" className="nav-link">
             <i className="fa fa-file-medical" /> Reports
-          </a>
+          </Link>
         </li>
         {/* USER DROPDOWN */}
         <li className="nav-item dropdown">

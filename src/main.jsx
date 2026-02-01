@@ -16,6 +16,7 @@ import Navigation from './Admin/Navigation.jsx'
 import Navbaraddmin from './Adminpanal/Navbaraddmin.jsx'
 import Dashboard from './Adminpanal/Dashboard.jsx'
 import Footeradmin from './Adminpanal/Footeradmin.jsx'
+import Doctorstaff from './Adminpanal/Doctorstaff.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -29,6 +30,7 @@ createRoot(document.getElementById('root')).render(
             {/* Admin View  */}
 
             <Route path='/Admin/Dashboard' element={<><Navbaraddmin/><Dashboard/><Footeradmin/></>} />
+             <Route path='/Admin/Doctor' element={<><Navbaraddmin/><Doctorstaff/><Footeradmin/></>} />
       </Routes>
   </BrowserRouter>
 )
