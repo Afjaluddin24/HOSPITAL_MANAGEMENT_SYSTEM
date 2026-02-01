@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
-import { warningAlert } from '../../../../RECAT/garment_invetory_system/src/Message/SweetAlert';
 import { Link } from 'react-router-dom';
+import { warningAlert } from '../Message/SweetAlert';
 
 function Navbaraddmin() {
 

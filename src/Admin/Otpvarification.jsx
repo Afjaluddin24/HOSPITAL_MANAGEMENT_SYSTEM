@@ -4,7 +4,7 @@ import { OtpSchema } from '../schemas';
 import { postData } from '../APIConfig/ConfigAPI';
 import { string } from 'yup';
 import { Link } from 'react-router-dom';
-import { errorAlert, successAlert, warningAlert } from '../../../../RECAT/garment_invetory_system/src/Message/SweetAlert';
+import { errorAlert, successAlert, warningAlert } from '../Message/SweetAlert';
 
 
 

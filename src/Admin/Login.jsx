@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { LoginSchema } from '../schemas';
 import axios from 'axios';
 import { postData } from '../APIConfig/ConfigAPI';
-import { errorAlert, successAlert } from '../../../../RECAT/garment_invetory_system/src/Message/SweetAlert';
+import { errorAlert, successAlert } from '../Message/SweetAlert';
 
 const initialValues ={
    username:"",
