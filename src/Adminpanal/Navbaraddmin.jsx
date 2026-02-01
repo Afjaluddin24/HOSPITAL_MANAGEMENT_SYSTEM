@@ -67,11 +67,35 @@ function Navbaraddmin() {
             <i className="fa fa-chart-line" /> Dashboard
           </Link>
         </li>
-        <li className="nav-item">
-          <Link  to="/Admin/Doctor" className="nav-link">
-            <i className="fa fa-user-doctor" /> Doctors
-          </Link >
-        </li>
+        <li className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle"
+          href="#"
+          role="button"
+          data-bs-toggle="dropdown"
+        >
+          <i className="fa fa-user-doctor" /> Doctors
+        </a>
+
+        <ul className="dropdown-menu dropdown-menu-end">
+          <li>
+            <Link className="dropdown-item" to="/Admin/Doctorlist">
+              <i className="fa fa-user-doctor me-2" /> Doctors
+            </Link>
+          </li>
+
+          <li>
+            <hr className="dropdown-divider" />
+          </li>
+
+          <li>
+            <Link className="dropdown-item" to="/Admin/Doctor">
+              <i className="fa fa-user-plus me-2" /> Add Doctor
+            </Link>
+          </li>
+        </ul>
+      </li>
+
         <li className="nav-item">
           <Link  to="/Admin/" className="nav-link">
             <i className="fa fa-user-nurse" /> Reception

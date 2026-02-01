@@ -1,9 +1,62 @@
-import React, { useState } from 'react'
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react'
+import { DoctorSchema } from '../schemas';
+import { errorAlert, successAlert } from '../Message/SweetAlert';
+import { postData } from '../APIConfig/ConfigAPI';
+import { jwtDecode } from 'jwt-decode';
 
  function Doctorstaff() {
     const [ Buttonvalues, setButtonvalues ] = useState("Save");
+    const [ MyId, setMyId ] = useState(0);
+    
+    const initialValues ={
+        name:"",
+        department:"",
+        specialization:"",
+        qualification:"",
+        email:"",
+        phone:""
+    };
 
-    // password bacned code api inset time sne maile now 
+    const {values,errors,handleBlur,handleChange,handleSubmit,touched} = useFormik({
+        initialValues:initialValues,
+        validationSchema:DoctorSchema,
+        onSubmit : async(values) =>{
+         var requestData ={
+            AdminId:MyId,
+            username:values.name,
+            deprtment:values.department,
+            specialization:values.specialization,
+            qualification:values.qualification,
+            Email:values.email,
+            phone:String(values.phone)
+          }
+          setButtonvalues("Please Wait...");
+          console.log("Request Data",requestData);
+          try {
+             const Apiresponse =await postData("Doctorapi/newDoctor",requestData);
+             if(Apiresponse.status === "Ok")
+             {
+                 successAlert(Apiresponse.result);
+                 setButtonvalues("Save");
+             }
+             else{
+                errorAlert(Apiresponse.result);
+                setButtonvalues("Save");
+             }
+          } catch (error) {
+            errorAlert("Error occured",error);
+            setButtonvalues("Save");
+          }
+        }
+    })
+
+    useEffect(() => {
+       var Token = jwtDecode(localStorage.getItem("Token"));
+       var AdminId = Token.AdminId;
+       setMyId(AdminId);
+    }, []);
+
   return (
     <div className="container-fluid mt-4">
         <div className="card shadow mt-5">
@@ -11,24 +64,25 @@ import React, { useState } from 'react'
             <i className="fa fa-user-doctor" /> New Doctor
             </div>
             <div className="card-body table-responsive">
-            <table className="table table-striped align-middle">
+             <form onSubmit={handleSubmit} method="post">
+                 <table className="table table-striped align-middle">
                 <tr>
                     <th></th>
                     <td>
                        <div className='row'>
                           <div className='col-md-4 mt-2'>
-                            <b>User Name</b>
-                               <input type="text" id='name' name='name' className='form-control' placeholder='Doctor Name'/>
+                            <b>User Name <small className="text-danger">{errors.name && touched.name ? errors.name : null}</small></b>
+                               <input type="text" id='name' name='name' value={values.name} onChange={handleChange} onBlur={handleBlur} className='form-control' placeholder='Doctor Name'/>
                            </div>
 
                            <div className='col-md-4 mt-2'>
-                             <b>Department</b>
-                               <input type="text" id='department' name='department' className='form-control' placeholder='Doctor Department'/>
+                             <b>Department <small className='text-danger'>{errors.department && touched.department ? errors.department : null}</small></b>
+                               <input type="text" id='department' name='department' value={values.department} onChange={handleChange} onBlur={handleBlur} className='form-control' placeholder='Doctor Department'/>
                             </div>
 
                             <div className="col-md-4 mt-2">
-                             <b>Specialization</b>
-                                <select id="specialization" name="specialization" className="form-control">
+                             <b>Specialization <small className="text-danger">{errors.specialization && touched.specialization ? errors.specialization : null}</small></b>
+                                <select id="specialization" name="specialization" value={values.specialization} onChange={handleChange} onBlur={handleBlur} className="form-control">
                                     <option value="">-- Select Specialization --</option>
                                     <option value="Cardiology">Cardiology</option>
                                     <option value="Neurology">Neurology</option>
@@ -52,18 +106,18 @@ import React, { useState } from 'react'
                             </div>
 
                             <div className='col-md-4 mt-2'>
-                             <b>Qualification</b>
-                               <input type="text" id='qualification' name='qualification' className='form-control' placeholder='Doctor Specialization'/>
+                             <b>Qualification <small className="text-danger">{errors.qualification && touched.qualification ? errors.qualification : null}</small></b>
+                               <input type="text" id='qualification' name='qualification' value={values.qualification} onChange={handleChange} onBlur={handleBlur} className='form-control' placeholder='Doctor Qualification'/>
                             </div>
 
                             <div className='col-md-4 mt-2'>
-                             <b>Email</b>
-                               <input type="text" id='email' name='email' className='form-control' placeholder='Doctor Email'/>
+                             <b>Email <small className="text-danger">{errors.email && touched.email ? errors.email : null}</small></b>
+                               <input type="text" id='email' name='email' value={values.email} onChange={handleChange} onBlur={handleBlur} className='form-control' placeholder='Doctor Email'/>
                             </div>
 
                             <div className='col-md-4 mt-2'>
-                             <b>Phone</b>
-                               <input type="text" id='phone' name='phone' className='form-control' placeholder='Doctor Phone'/>
+                             <b>Phone <small className="text-danger">{errors.phone && touched.phone ? errors.phone : null}</small></b>
+                               <input type="number" id='phone' name='phone' value={values.phone} onChange={handleChange} onBlur={handleBlur} className='form-control' placeholder='Doctor Phone'/>
                             </div>
 
                             <div className='col-md-12 mt-3'>
@@ -76,6 +130,7 @@ import React, { useState } from 'react'
                     
                 </tr>
             </table>
+             </form>
             </div>
         </div>
         <div className="card shadow mt-5">

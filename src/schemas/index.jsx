@@ -15,3 +15,12 @@ export const LoginSchema = Yup.object({
 export  const OtpSchema = Yup.object({
     otp:Yup.string().length(6,"OTP must be 6 digits only").required("required")
 })
+
+export const DoctorSchema = Yup.object({
+    name:Yup.string().required("*"),
+    department:Yup.string().required("*"),
+    specialization:Yup.string().required("*"),
+    qualification:Yup.string().required("*"),
+    email:Yup.string().email("Invalid email format").required("*"),
+    phone:Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("*")
+});
