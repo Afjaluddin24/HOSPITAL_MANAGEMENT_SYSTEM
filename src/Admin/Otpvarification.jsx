@@ -30,7 +30,7 @@ function Otpvarification() {
                     localStorage.setItem("Token",Apireponse.token);
                     setInitialValues("Verify OTP");
                     setTimeout(() => {
-                      window.location.href = "/";
+                      window.location.href = "/Admin/Dashboard";
                     },2000);
                 }
                 else{
