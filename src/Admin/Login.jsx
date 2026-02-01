@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { LoginSchema } from '../schemas';
 import axios from 'axios';
 import { postData } from '../APIConfig/ConfigAPI';
+import { errorAlert, successAlert } from '../../../../RECAT/garment_invetory_system/src/Message/SweetAlert';
 
 const initialValues ={
    username:"",
@@ -29,18 +30,18 @@ function Login() {
           // console.log('Response is',Apiresponse);
           if(Apiresponse.status === "Ok")
           {
-             alert(Apiresponse.result);
+             successAlert(Apiresponse.result);
              setTimeout(() => {
                 window.location.href = "/Verification"
              }, 2000);
              setButtonvalue("Login");
           }
           else{
-            alert(Apiresponse.result);
+            errorAlert(Apiresponse.result);
             setButtonvalue("Login");
           }
         } catch (error) {
-          console.log("Error occured",error);
+          errorAlert("Error occured",error);
           setButtonvalue("Login");
         }
    }

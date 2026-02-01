@@ -4,6 +4,7 @@ import { OtpSchema } from '../schemas';
 import { postData } from '../APIConfig/ConfigAPI';
 import { string } from 'yup';
 import { Link } from 'react-router-dom';
+import { errorAlert, successAlert } from '../../../../RECAT/garment_invetory_system/src/Message/SweetAlert';
 
 
 
@@ -26,7 +27,7 @@ function Otpvarification() {
             try {
                 if(Apireponse.status === "Ok")
                 {
-                    alert(Apireponse.result);
+                    successAlert(Apireponse.result);
                     localStorage.setItem("Token",Apireponse.token);
                     setInitialValues("Verify OTP");
                     setTimeout(() => {
@@ -34,11 +35,11 @@ function Otpvarification() {
                     },2000);
                 }
                 else{
-                   alert(Apireponse.result);
+                   errorAlert(Apireponse.result);
                    setInitialValues("Verify OTP");
                 }
             } catch (error) {
-                console.log("Error occured",error);
+                errorAlert("Error occured",error);
                 setInitialValues("Verify OTP");
             }
         }

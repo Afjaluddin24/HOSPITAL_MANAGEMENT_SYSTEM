@@ -1,6 +1,46 @@
-import React from 'react'
+import { jwtDecode } from 'jwt-decode';
+import React, { useEffect, useState } from 'react'
+import { warningAlert } from '../../../../RECAT/garment_invetory_system/src/Message/SweetAlert';
 
 function Navbaraddmin() {
+
+  const [userName,setUserName] = useState("");  
+  const Tocken =  localStorage.getItem("Token");
+  const logOut =  async() => {
+    const warningMessage = await warningAlert("Are you sure to logout?");
+    if(warningMessage)
+    {
+        localStorage.removeItem("Token");
+        window.location.href = "/Login";
+    }
+  }
+
+  useEffect(()=>{
+     
+     if(Tocken)
+     {
+        const decodedToken = jwtDecode(Tocken);
+        console.log(decodedToken);
+        setUserName(decodedToken.sub);
+
+       const expiryTime = decodedToken.exp * 1000;
+           const currentTime = Date.now();
+           const remainingMs = expiryTime - currentTime;
+           const remainingMinutes = Math.floor(remainingMs / 60000);
+           const remainingSeconds = Math.floor((remainingMs % 60000) / 1000);
+           console.log(`Token expires in ${remainingMinutes} min ${remainingSeconds} sec`);
+
+           setTimeout(() => {
+             warningAlert("Session expired. Please login again.");
+           }, 2000);
+
+           setTimeout(() => {
+             warningAlert("Session expired. Please login again.");
+             localStorage.removeItem("Token");
+             window.location.href = "/Login";
+           }, remainingMs);
+     }
+  },[])
   return (
     <>
        <nav
@@ -54,7 +94,7 @@ function Navbaraddmin() {
             role="button"
             data-bs-toggle="dropdown"
           >
-            <i className="fa fa-user" /> Welcome, Admin
+            <i className="fa fa-user" /> Welcome, {userName}
           </a>
           <ul className="dropdown-menu dropdown-menu-end">
             <li>
@@ -66,8 +106,8 @@ function Navbaraddmin() {
               <hr className="dropdown-divider" />
             </li>
             <li>
-              <a className="dropdown-item text-danger" href="#">
-                <i className="fa fa-right-from-bracket me-2" /> Logout
+              <a className="dropdown-item text-danger" href="#" onClick={() =>logOut()}>
+                <i className="fa fa-right-from-bracket me-2"/> Logout
               </a>
             </li>
           </ul>
