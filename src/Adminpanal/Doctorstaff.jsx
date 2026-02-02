@@ -2,12 +2,16 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react'
 import { DoctorSchema } from '../schemas';
 import { errorAlert, successAlert } from '../Message/SweetAlert';
-import { postData } from '../APIConfig/ConfigAPI';
+import { getData, postData } from '../APIConfig/ConfigAPI';
 import { jwtDecode } from 'jwt-decode';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
  function Doctorstaff() {
     const [ Buttonvalues, setButtonvalues ] = useState("Save");
     const [ MyId, setMyId ] = useState(0);
+
+    const [DoctorDetails, setDoctorDetails ] = useState([]);
     
     const initialValues ={
         name:"",
@@ -38,6 +42,7 @@ import { jwtDecode } from 'jwt-decode';
              if(Apiresponse.status === "Ok")
              {
                  successAlert(Apiresponse.result);
+                 getDoctorDetails();
                  setButtonvalues("Save");
              }
              else{
@@ -51,10 +56,28 @@ import { jwtDecode } from 'jwt-decode';
         }
     })
 
+   const getDoctorDetails = async () =>{
+     const respons = await getData("Doctorapi/getDoctors/" + 3);
+     try {
+        if(respons.status === "Ok")
+        {
+            console.log("data is",respons.result);
+            setDoctorDetails(respons.result);
+        }
+        else{
+            console.log("error",respons.result);
+        }
+     } catch (error) {
+        console.log("error is");
+     }
+   }
+
     useEffect(() => {
        var Token = jwtDecode(localStorage.getItem("Token"));
        var AdminId = Token.AdminId;
        setMyId(AdminId);
+
+       getDoctorDetails();
     }, []);
 
   return (
@@ -138,54 +161,22 @@ import { jwtDecode } from 'jwt-decode';
             <i className="fa fa-user-doctor" /> Doctor Details
             </div>
             <div className="card-body table-responsive">
-            <table className="table table-striped align-middle">
-                <thead className="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Phone</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Dr. Amit Sharma</td>
-                    <td>Cardiology</td>
-                    <td>9876543210</td>
-                    <td>
-                    <span className="badge bg-success">Available</span>
-                    </td>
-                    <td>
-                    <button className="btn btn-sm btn-primary">
-                        <i className="fa fa-eye" />
-                    </button>
-                    <button className="btn btn-sm btn-warning">
-                        <i className="fa fa-edit" />
-                    </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Dr. Neha Patel</td>
-                    <td>Neurology</td>
-                    <td>9123456780</td>
-                    <td>
-                    <span className="badge bg-danger">Busy</span>
-                    </td>
-                    <td>
-                    <button className="btn btn-sm btn-primary">
-                        <i className="fa fa-eye" />
-                    </button>
-                    <button className="btn btn-sm btn-warning">
-                        <i className="fa fa-edit" />
-                    </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+             <DataTable value={DoctorDetails} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+                <Column field="fullname" header="Name" />
+                <Column field="email" header="Email" />
+                <Column field="phone" header="Phone" />
+                <Column field="specialization" header="Specialization" />
+                <Column field="qualification" header="Qualification" />
+                <Column field="post" header="Post" />
+                {/* Date column with dd/mm/yyyy format */}
+                <Column
+                    header="Created Date"
+                    body={(rowData) => {
+                    const date = new Date(rowData.created_at);
+                    return date.toLocaleDateString("en-GB"); // dd/mm/yyyy
+                    }}
+                />
+             </DataTable>
             </div>
         </div>
     </div>

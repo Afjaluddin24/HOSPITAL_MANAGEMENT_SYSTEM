@@ -18,6 +18,11 @@ import Dashboard from './Adminpanal/Dashboard.jsx'
 import Footeradmin from './Adminpanal/Footeradmin.jsx'
 import Doctorstaff from './Adminpanal/Doctorstaff.jsx'
 
+
+
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+
+
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
       <Routes>
