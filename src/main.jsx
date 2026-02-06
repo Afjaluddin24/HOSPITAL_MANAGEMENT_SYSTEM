@@ -21,6 +21,7 @@ import Doctorstaff from './Adminpanal/Doctorstaff.jsx'
 
 
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import Receptionist from './Adminpanal/Receptionist.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -36,6 +37,7 @@ createRoot(document.getElementById('root')).render(
 
             <Route path='/Admin/Dashboard' element={<><Navbaraddmin/><Dashboard/><Footeradmin/></>} />
              <Route path='/Admin/Doctor' element={<><Navbaraddmin/><Doctorstaff/><Footeradmin/></>} />
+             <Route path='/Admin/Receptionist' element={<><Navbaraddmin/><Receptionist/><Footeradmin/></>} />
       </Routes>
   </BrowserRouter>
 )

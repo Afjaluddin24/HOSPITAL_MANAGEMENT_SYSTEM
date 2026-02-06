@@ -57,7 +57,7 @@ import { Column } from 'primereact/column';
     })
 
    const getDoctorDetails = async () =>{
-     const respons = await getData("Doctorapi/getDoctors/" + 3);
+     const respons = await getData(`Doctorapi/getDoctors/${MyId}`);
      try {
         if(respons.status === "Ok")
         {

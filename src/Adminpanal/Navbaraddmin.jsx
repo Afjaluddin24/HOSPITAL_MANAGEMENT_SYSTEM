@@ -97,7 +97,7 @@ function Navbaraddmin() {
       </li>
 
         <li className="nav-item">
-          <Link  to="/Admin/" className="nav-link">
+          <Link to="/Admin/Receptionist" className="nav-link">
             <i className="fa fa-user-nurse" /> Reception
           </Link>
         </li>

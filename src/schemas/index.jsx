@@ -24,3 +24,11 @@ export const DoctorSchema = Yup.object({
     email:Yup.string().email("Invalid email format").required("*"),
     phone:Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("*")
 });
+
+export const ReceptionistSchema  = Yup.object({
+     username:Yup.string().required("*"),
+     email:Yup.string().email("Invalid email format").required("*"),
+     phone:Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("*"),
+     shift_time:Yup.string().required("*"),
+     address:Yup.string().required("*")
+});
