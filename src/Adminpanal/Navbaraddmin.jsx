@@ -79,7 +79,7 @@ function Navbaraddmin() {
 
         <ul className="dropdown-menu dropdown-menu-end">
           <li>
-            <Link className="dropdown-item" to="/Admin/Doctorlist">
+            <Link className="dropdown-item" to="/Admin/Doctors">
               <i className="fa fa-user-doctor me-2" /> Doctors
             </Link>
           </li>

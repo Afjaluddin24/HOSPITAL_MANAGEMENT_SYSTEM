@@ -10,7 +10,7 @@ import { Column } from 'primereact/column';
  function Doctorstaff() {
     const [ Buttonvalues, setButtonvalues ] = useState("Save");
     const [ MyId, setMyId ] = useState(0);
-
+    const [searchText, setSearchText] = useState("");
     const [DoctorDetails, setDoctorDetails ] = useState([]);
     
     const initialValues ={
@@ -22,7 +22,7 @@ import { Column } from 'primereact/column';
         phone:""
     };
 
-    const {values,errors,handleBlur,handleChange,handleSubmit,touched} = useFormik({
+    const {values,errors,handleBlur,handleChange,handleSubmit,touched,resetForm} = useFormik({
         initialValues:initialValues,
         validationSchema:DoctorSchema,
         onSubmit : async(values) =>{
@@ -56,8 +56,8 @@ import { Column } from 'primereact/column';
         }
     })
 
-   const getDoctorDetails = async () =>{
-     const respons = await getData(`Doctorapi/getDoctors/${MyId}`);
+   const getDoctorDetails = async (Id) =>{
+     const respons = await getData(`Doctorapi/getDoctors/${Id}`);
      try {
         if(respons.status === "Ok")
         {
@@ -72,12 +72,28 @@ import { Column } from 'primereact/column';
      }
    }
 
-    useEffect(() => {
-       var Token = jwtDecode(localStorage.getItem("Token"));
-       var AdminId = Token.AdminId;
-       setMyId(AdminId);
+   const sendWhatsAppMessage = (phone) => {
+        const message =
+                  "City Hospital:\nPlease update your profile details in your account.\nThank you.";
+        const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        window.open(url, "_blank");
+  };
 
-       getDoctorDetails();
+  const Chearhendel = (e) =>{
+     setSearchText(e.target.value);
+  }
+
+  const filteredDoctors = DoctorDetails.filter((item) =>
+          item.fullname?.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+
+    useEffect(() => {
+       const decodedToken = jwtDecode(localStorage.getItem("Token"));
+       console.log(decodedToken);
+       setMyId(decodedToken.AdminId);
+
+       getDoctorDetails(decodedToken.AdminId);
     }, []);
 
   return (
@@ -146,7 +162,8 @@ import { Column } from 'primereact/column';
                             <div className='col-md-12 mt-3'>
                                 <button type='submit' disabled={Buttonvalues !== "Save"} className='btn btn-primary'>
                                   {Buttonvalues !== "Save" ? <i className="fa fa-spinner fa-spin"></i> : "Save"}
-                                 </button>
+                                 </button>&nbsp;&nbsp;
+                                 <button type='button' onClick={() => resetForm()} className='btn btn-danger'>Clear</button>
                             </div>
                         </div>
                     </td>
@@ -161,13 +178,33 @@ import { Column } from 'primereact/column';
             <i className="fa fa-user-doctor" /> Doctor Details
             </div>
             <div className="card-body table-responsive">
-             <DataTable value={DoctorDetails} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
-                <Column field="fullname" header="Name" />
-                <Column field="email" header="Email" />
-                <Column field="phone" header="Phone" />
-                <Column field="specialization" header="Specialization" />
-                <Column field="qualification" header="Qualification" />
-                <Column field="post" header="Post" />
+             <div className=" col-md-5 mb-3">
+                <div className="input-group">
+                    <span className="input-group-text">
+                        <i className="fa-solid fa-magnifying-glass"></i>
+                    </span>
+
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search Doctor"
+                        onKeyUp={(e) => Chearhendel(e)}
+                    />
+                </div>
+            </div>
+
+             <DataTable value={filteredDoctors} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+                <Column  header="Details" body={(data) =>
+                    <>
+                       <h5>{data.fullname}</h5>
+                       <h6>{data.email}</h6>
+                       <b><i className="fa-solid fa-phone" style={{color: "#0d6efd"}}></i>&nbsp;{data.phone}</b>
+                    </>
+                } />
+                <Column field="specialization" sortable header="Specialization" />
+                <Column field="qualification" sortable header="Qualification" />
+                <Column field="post" sortable header="Post" />
+                <Column field="available_time" sortable header="available_time" />
                 {/* Date column with dd/mm/yyyy format */}
                 <Column
                     header="Created Date"
@@ -176,6 +213,25 @@ import { Column } from 'primereact/column';
                     return date.toLocaleDateString("en-GB"); // dd/mm/yyyy
                     }}
                 />
+                <Column
+                    header="Message"
+                    body={(rowData) => (
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <i
+                                className="fa-brands fa-whatsapp"
+                                style={{
+                                    fontSize: "1.5rem",
+                                    color: "#25D366",
+                                    cursor: "pointer"
+                                }}
+                                onClick={() => sendWhatsAppMessage(rowData.phone)}
+                            />
+                        </div>
+                   )}
+                />
+                <Column header="Action" body={(rowData) => (
+                  <i class="fa-solid fa-pen-to-square fa-xl"></i>
+                )} />
              </DataTable>
             </div>
         </div>

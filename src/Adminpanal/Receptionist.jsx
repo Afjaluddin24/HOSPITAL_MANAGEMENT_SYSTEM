@@ -8,26 +8,30 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
  function Receptionist() {
-
-    const [ Buttonvalues, setButtonvalues ] = useState("Save");
-    const [ReceptionistDetails, setReceptionistDetails ] = useState([]);
-    const [AdminId, setAdminId] = useState(0);
-    const initialValues ={
+    
+    const [initialValues,setinitialValues] = useState({
         username:"",
         email:"",
         phone:"",
         shift_time:"",
-        address:"",
-        AdminId:0,
-    }
+        address:""
+    });
 
+   
 
-    const {values,errors,handleChange,handleBlur,handleSubmit,touched} = useFormik({
+    const [ Buttonvalues, setButtonvalues ] = useState("Save");
+    const [ReceptionistDetails, setReceptionistDetails ] = useState([]);
+    const [Myid, setMyid] = useState(0);
+    const [searchText, setSearchText] = useState("");
+    
+
+    const {values,errors,handleChange,handleBlur,handleSubmit,touched,resetForm} = useFormik({
+        enableReinitialize:true,
         initialValues:initialValues,
         validationSchema:ReceptionistSchema,
         onSubmit:async (values) =>{
            var requestData ={
-              AdminId:AdminId,
+              adminId:Myid,
               username:values.username,
               email:values.email,
               phone:String(values.phone),
@@ -55,16 +59,14 @@ import { Column } from 'primereact/column';
         },
 
     })
-
-
-    const ReceptionsList = async () =>{
-        var responseAPI =await getData(`Receptionistapi/Receptionist/${AdminId}`);
+    
+    const ReceptionsList = async (Id) =>{
+        var responseAPI =await getData(`Receptionistapi/Receptionist/${Id}`);
         try {
             if(responseAPI.status === "Ok")
             {
                 const data = responseAPI.result;
-                console.log("Receptionist List",data);
-                setReceptionistDetails(data.result);
+                setReceptionistDetails(data);
             }
             else{
                 errorAlert(responseAPI.result);
@@ -73,14 +75,32 @@ import { Column } from 'primereact/column';
             errorAlert("Error occured",error.result);
         }
     }
+   
+
+    // WahtsApp message function
+    const sendWhatsAppMessage = (phone) => {
+        const message =
+                  "City Hospital:\nPlease update your profile details in your account.\nThank you.";
+        const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        window.open(url, "_blank");
+    };
+
+    const handleSearch = (e) => {
+        setSearchText(e.target.value);
+    }
+
+    const filteredReceptionists = ReceptionistDetails.filter((item) =>
+          item.fullname?.toLowerCase().includes(searchText.toLowerCase())
+    );
+
 
 
     useEffect(() => {
-    var Token = jwtDecode(localStorage.getItem("Token"));
-    var AdminId = Token.AdminId;
-    setAdminId(AdminId);
+     const decodedToken = jwtDecode(localStorage.getItem("Token"));
+     console.log(decodedToken);
+     setMyid(decodedToken.AdminId);
 
-    ReceptionsList(); 
+    ReceptionsList(decodedToken.AdminId); 
 }, []);
 
   return (
@@ -100,7 +120,6 @@ import { Column } from 'primereact/column';
                                 <b>User Name <small className="text-danger">{errors.username && touched.username ? errors.username : null}</small></b>
                                    <input type="text" id='username' name='username' value={values.username} onChange={handleChange} onBlur={handleBlur} className='form-control' placeholder='Receptionist Name'/>
                                </div>
-    
                                <div className='col-md-4 mt-2'>
                                  <b>Email <small className='text-danger'>{errors.email && touched.email ? errors.email : null}</small></b>
                                    <input type="text" id='email' name='email' value={values.email} onChange={handleChange} onBlur={handleBlur} className='form-control' placeholder='Receptionist Email'/>
@@ -133,12 +152,11 @@ import { Column } from 'primereact/column';
                                     </textarea>
                                 </div>
     
-                               
-    
                                 <div className='col-md-12 mt-3'>
                                     <button type='submit' disabled={Buttonvalues !== "Save"} className='btn btn-primary'>
                                       {Buttonvalues !== "Save" ? <i className="fa fa-spinner fa-spin"></i> : "Save"}
-                                     </button>
+                                     </button>&nbsp;&nbsp;
+                                     <button type='button' onClick={() => resetForm()} className='btn btn-danger'>Clear</button>
                                 </div>
                             </div>
                         </td>
@@ -150,25 +168,53 @@ import { Column } from 'primereact/column';
             </div>
             <div className="card shadow mt-5">
                 <div className="card-header text-white" style={{ background: "#0d6efd" }}>
-                <i className="fa fa-user-doctor" /> Doctor Details
+                    <img src="../Myimage/receptionist.png"  width={35} alt="Not Found" /> Reception Details
                 </div>
                 <div className="card-body table-responsive">
+                    <div className=" col-md-5 mb-3">
+                        <div className="input-group">
+                            <span className='input-group-text'>
+                                <i className="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input type="text" className="form-control" onKeyUp={(e) => handleSearch(e)} placeholder="Search Receptionist" />
+                        </div>
+                    </div>
                      
-                     <DataTable value={ReceptionistDetails} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
-                                    <Column field="receptionist_id" header="#" />
-                                    <Column field="fullname" header="Full Name" />
-                                    <Column field="gender" header="Gender" />
-                                    <Column field="shift_time" header="Shift Time" />
-                                    <Column field="specialization" header="Specialization" />
+                     <DataTable value={filteredReceptionists} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+                                    <Column field="receptionist_id" header="#" sortable  />
+                                    <Column header="Full Name"  
+                                        body={(rowData) =>
+                                            <>
+                                               <h5>{rowData.fullname}</h5>
+                                               <h6>{rowData.gender}</h6>
+                                               <b><i className="fa-solid fa-phone" style={{color: "#0d6efd"}}></i>&nbsp;{rowData.phone}</b>
+                                            </>
+                                         } />
+                                    <Column field="shift_time" sortable  header="Shift Time" />
                                     <Column field="address" header="Address" />
-                                    <Column field="post" header="Post" />
                                     {/* Date column with dd/mm/yyyy format */}
-                                    <Column
+                                    <Column 
                                         header="Created Date"
                                         body={(rowData) => {
                                         const date = new Date(rowData.created_at);
                                         return date.toLocaleDateString("en-GB"); // dd/mm/yyyy
                                         }}
+                                    />
+                                    <Column
+                                        header="Message"
+                                        body={(rowData) => (
+                                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                <i
+                                                  className="fa-brands fa-whatsapp"
+                                                  style={{
+                                                        fontSize: "1.5rem",
+                                                        color: "#25D366",
+                                                        cursor: "pointer"
+                                                    }}
+                                                    onClick={() => sendWhatsAppMessage(rowData.phone)}
+                                                />
+                                            </div>
+                                    )}
                                     />
                     </DataTable>
                 </div>

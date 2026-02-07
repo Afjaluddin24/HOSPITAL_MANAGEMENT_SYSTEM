@@ -28,23 +28,25 @@ function Otpvarification() {
                 if(Apireponse.status === "Ok")
                 {
                     warningAlert(Apireponse.result,"User warking in 60 minutes session only, after that you need to login again.");
-                    localStorage.setItem("Token",Apireponse.token);
                     setInitialValues("Verify OTP");
                     console.log("Role is",Apireponse.role);
 
                     if(Apireponse.role === "Doctor")
                     {
+                        localStorage.setItem("Tokenr",Apireponse.token);
                         setTimeout(() => {
                             window.location.href = "/Doctor/Dashboard";
                         },2000);
                     }
                     else if(Apireponse.role === "Receptionist")
                     {
+                        localStorage.setItem("Tokenr",Apireponse.token);
                         setTimeout(() => {
                             window.location.href = "/Staff/Dashboard";
                         },2000);
                     }
                     else{
+                         localStorage.setItem("Token",Apireponse.token);
                          setTimeout(() => {
                             window.location.href = "/Admin/Dashboard";
                         },2000);
