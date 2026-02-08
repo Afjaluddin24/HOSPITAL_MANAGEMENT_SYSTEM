@@ -32,3 +32,9 @@ export const ReceptionistSchema  = Yup.object({
      shift_time:Yup.string().required("*"),
      address:Yup.string().required("*")
 });
+
+export const ShifSchema = Yup.object({
+    deprtment:Yup.string().required("*"),
+    post:Yup.string().required("*"),
+    Shift_time:Yup.string().required("*")
+})

@@ -6,13 +6,17 @@ import { getData, postData } from '../APIConfig/ConfigAPI';
 import { jwtDecode } from 'jwt-decode';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import ManageDoctorPopup from './Popups/ManageDoctorPopup';
 
  function Doctorstaff() {
+    const [show,setShow] = useState(false);
     const [ Buttonvalues, setButtonvalues ] = useState("Save");
     const [ MyId, setMyId ] = useState(0);
     const [searchText, setSearchText] = useState("");
     const [DoctorDetails, setDoctorDetails ] = useState([]);
+
     
+      
     const initialValues ={
         name:"",
         department:"",
@@ -23,6 +27,7 @@ import { Column } from 'primereact/column';
     };
 
     const {values,errors,handleBlur,handleChange,handleSubmit,touched,resetForm} = useFormik({
+        enableReinitialize:true,
         initialValues:initialValues,
         validationSchema:DoctorSchema,
         onSubmit : async(values) =>{
@@ -55,6 +60,7 @@ import { Column } from 'primereact/column';
           }
         }
     })
+    
 
    const getDoctorDetails = async (Id) =>{
      const respons = await getData(`Doctorapi/getDoctors/${Id}`);
@@ -86,6 +92,37 @@ import { Column } from 'primereact/column';
   const filteredDoctors = DoctorDetails.filter((item) =>
           item.fullname?.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  // Popup using this 
+
+    const [DoctorId,setDoctorId] = useState(0);
+    const [deprtment,setDeprtment] = useState("");
+    const [post,setPost] = useState("");
+    const [Shift_time,SetShift_time] = useState("");
+    const [Fullname,setFullname] = useState("");
+
+    // popup uisng end
+
+  const cheneShift =async (Id) =>{
+    const responseApi = await getData("Doctorapi/listDoctor/" + Id);
+     try {
+       if(responseApi.status === "Ok")
+        {
+            const Data = responseApi.result;
+            setDeprtment(responseApi.deprtment);
+            setPost(responseApi.post);
+            setFullname(responseApi.fullname);
+            SetShift_time(responseApi.available_time);
+            setDoctorId(Data.doctor_id);
+            setShow(true);
+        } 
+        else{
+             console.log("No Data Found",responseApi.result);
+        }
+     } catch (error) {
+        console.log(error);
+     }
+  }
 
 
     useEffect(() => {
@@ -230,11 +267,18 @@ import { Column } from 'primereact/column';
                    )}
                 />
                 <Column header="Action" body={(rowData) => (
-                  <i class="fa-solid fa-pen-to-square fa-xl"></i>
+                  <i className="fa-solid fa-pen-to-square fa-xl" onClick={() => cheneShift(rowData.doctor_id)}></i>
                 )} />
              </DataTable>
             </div>
         </div>
+        <ManageDoctorPopup show={show} setShow={setShow} 
+         DoctorId={DoctorId} setDoctorId={setDoctorId} 
+         deprtment={deprtment}
+         post={post} setPost={setPost}
+         Shift_time={Shift_time} SetShift_time ={SetShift_time}
+         Fullname={Fullname} setFullname={setFullname}
+        />
     </div>
   )
 }
