@@ -19,6 +19,7 @@ import Footeradmin from './Adminpanal/Footeradmin.jsx'
 import Doctorstaff from './Adminpanal/Doctorstaff.jsx'
 import Doctorslists from './Adminpanal/Doctorslists.jsx'
 import Receptionist from './Adminpanal/Receptionist.jsx'
+import AvailableDoctor from './Adminpanal/AvailableDoctor.jsx'
 
 
 import "primereact/resources/themes/lara-light-cyan/theme.css";
@@ -38,6 +39,7 @@ createRoot(document.getElementById('root')).render(
             <Route path='/Admin/Dashboard' element={<><Navbaraddmin/><Dashboard/><Footeradmin/></>} />
              <Route path='/Admin/Doctor' element={<><Navbaraddmin/><Doctorstaff/><Footeradmin/></>} />
              <Route path='/Admin/Doctors' element={<><Navbaraddmin/><Doctorslists/><Footeradmin/></>} />
+             <Route path='/Admin/AvailableDoctors' element={<><Navbaraddmin/><AvailableDoctor/><Footeradmin/></>} />
              <Route path='/Admin/Receptionist' element={<><Navbaraddmin/><Receptionist/><Footeradmin/></>} />
       </Routes>
   </BrowserRouter>

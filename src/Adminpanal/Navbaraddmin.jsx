@@ -79,6 +79,14 @@ function Navbaraddmin() {
 
         <ul className="dropdown-menu dropdown-menu-end">
           <li>
+            <Link className="dropdown-item" to="/Admin/AvailableDoctors">
+              <i class="fa-solid fa-user-group me-2"></i> Available Doctor
+            </Link>
+          </li>
+           <li>
+            <hr className="dropdown-divider" />
+          </li>
+          <li>
             <Link className="dropdown-item" to="/Admin/Doctors">
               <i className="fa fa-user-doctor me-2" /> Doctors
             </Link>

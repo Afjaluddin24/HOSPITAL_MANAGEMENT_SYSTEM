@@ -139,7 +139,7 @@ function Doctorslists() {
                         <Column field="specialization" sortable header="Specialization" />
                         <Column field="qualification" sortable header="Qualification" />
                         <Column field="post" sortable header="Post" />
-
+                        <Column field="available_time" sortable header="Sheef Time" />
                         <Column
                             header="Created Date"
                             body={(rowData) => {

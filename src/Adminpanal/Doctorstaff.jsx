@@ -41,8 +41,8 @@ import { Column } from 'primereact/column';
              const Apiresponse =await postData("Doctorapi/newDoctor",requestData);
              if(Apiresponse.status === "Ok")
              {
-                 successAlert(Apiresponse.result);
                  getDoctorDetails();
+                 successAlert(Apiresponse.result);
                  setButtonvalues("Save");
              }
              else{
@@ -204,7 +204,7 @@ import { Column } from 'primereact/column';
                 <Column field="specialization" sortable header="Specialization" />
                 <Column field="qualification" sortable header="Qualification" />
                 <Column field="post" sortable header="Post" />
-                <Column field="available_time" sortable header="available_time" />
+                 <Column field="available_time" sortable header="Sheef Time" />
                 {/* Date column with dd/mm/yyyy format */}
                 <Column
                     header="Created Date"

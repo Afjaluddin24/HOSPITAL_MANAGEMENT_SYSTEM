@@ -100,7 +100,7 @@ import { Column } from 'primereact/column';
      console.log(decodedToken);
      setMyid(decodedToken.AdminId);
 
-    ReceptionsList(decodedToken.AdminId); 
+     ReceptionsList(decodedToken.AdminId); 
 }, []);
 
   return (
