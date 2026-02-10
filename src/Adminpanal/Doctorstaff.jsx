@@ -17,14 +17,17 @@ import ManageDoctorPopup from './Popups/ManageDoctorPopup';
 
     
       
-    const initialValues ={
+    const [initialValues,setinitialValues] = useState({
         name:"",
         department:"",
         specialization:"",
         qualification:"",
         email:"",
-        phone:""
-    };
+        phone:"",
+        deprtment:"",
+        post:"",
+        Shift_time:""
+    });
 
     const {values,errors,handleBlur,handleChange,handleSubmit,touched,resetForm} = useFormik({
         enableReinitialize:true,
@@ -64,20 +67,19 @@ import ManageDoctorPopup from './Popups/ManageDoctorPopup';
 
    const getDoctorDetails = async (Id) =>{
      const respons = await getData(`Doctorapi/getDoctors/${Id}`);
-     try {
-        if(respons.status === "Ok")
-        {
-            console.log("data is",respons.result);
-            setDoctorDetails(respons.result);
+        try {
+            if(respons.status === "Ok")
+            {
+                setDoctorDetails(respons.result);
+            }
+            else{
+                console.log("error",respons.result);
+            }
+        } catch (error) {
+            console.log("error is");
         }
-        else{
-            console.log("error",respons.result);
-        }
-     } catch (error) {
-        console.log("error is");
-     }
-   }
-
+   };
+ 
    const sendWhatsAppMessage = (phone) => {
         const message =
                   "City Hospital:\nPlease update your profile details in your account.\nThank you.";
@@ -96,10 +98,6 @@ import ManageDoctorPopup from './Popups/ManageDoctorPopup';
   // Popup using this 
 
     const [DoctorId,setDoctorId] = useState(0);
-    const [deprtment,setDeprtment] = useState("");
-    const [post,setPost] = useState("");
-    const [Shift_time,SetShift_time] = useState("");
-    const [Fullname,setFullname] = useState("");
 
     // popup uisng end
 
@@ -109,10 +107,13 @@ import ManageDoctorPopup from './Popups/ManageDoctorPopup';
        if(responseApi.status === "Ok")
         {
             const Data = responseApi.result;
-            setDeprtment(responseApi.deprtment);
-            setPost(responseApi.post);
-            setFullname(responseApi.fullname);
-            SetShift_time(responseApi.available_time);
+            setinitialValues({
+                name:Data.fullname,
+                deprtment:Data.deprtment,
+                post:Data.post,
+                Shift_time:Data.available_time
+
+            })
             setDoctorId(Data.doctor_id);
             setShow(true);
         } 
@@ -123,7 +124,6 @@ import ManageDoctorPopup from './Popups/ManageDoctorPopup';
         console.log(error);
      }
   }
-
 
     useEffect(() => {
        const decodedToken = jwtDecode(localStorage.getItem("Token"));
@@ -215,20 +215,26 @@ import ManageDoctorPopup from './Popups/ManageDoctorPopup';
             <i className="fa fa-user-doctor" /> Doctor Details
             </div>
             <div className="card-body table-responsive">
-             <div className=" col-md-5 mb-3">
-                <div className="input-group">
-                    <span className="input-group-text">
-                        <i className="fa-solid fa-magnifying-glass"></i>
-                    </span>
+              <div className="row">
+                    <div className=" col-md-5 mb-3">
+                    <div className="input-group">
+                        <span className="input-group-text">
+                            <i className="fa-solid fa-magnifying-glass"></i>
+                        </span>
 
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search Doctor"
-                        onKeyUp={(e) => Chearhendel(e)}
-                    />
-                </div>
-            </div>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search Doctor"
+                            onKeyUp={(e) => Chearhendel(e)}
+                        />
+                    </div>
+                   </div>
+                   <div className="col-md-7 text-end">
+                      <button type="button" className='btn btn-warning'><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                   </div>
+                   
+              </div>
 
              <DataTable value={filteredDoctors} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
                 <Column  header="Details" body={(data) =>
@@ -274,10 +280,9 @@ import ManageDoctorPopup from './Popups/ManageDoctorPopup';
         </div>
         <ManageDoctorPopup show={show} setShow={setShow} 
          DoctorId={DoctorId} setDoctorId={setDoctorId} 
-         deprtment={deprtment}
-         post={post} setPost={setPost}
-         Shift_time={Shift_time} SetShift_time ={SetShift_time}
-         Fullname={Fullname} setFullname={setFullname}
+         initialValues={initialValues}
+         setinitialValues={setinitialValues}
+         getDoctorDetails={getDoctorDetails}
         />
     </div>
   )

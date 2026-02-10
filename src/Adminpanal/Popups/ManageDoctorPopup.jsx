@@ -1,27 +1,42 @@
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import { ShifSchema } from '../../schemas'
+import { postData } from '../../APIConfig/ConfigAPI';
+import { errorAlert, successAlert } from '../../Message/SweetAlert';
 
  function ManageDoctorPopup(props) {
 
-   const initialValues ={
-      deprtment:"",
-      post:"",
-      Shift_time:""
-   };
-
+   const [Butonvalues,setButonvalues] = useState("Save");
    const {values,errors,handleBlur,handleChange,handleReset,handleSubmit,touched} = useFormik({
        enableReinitialize:true,
-       initialValues:initialValues,
+       initialValues:props.initialValues,
        validationSchema:ShifSchema,
-       onSubmit:(values) =>{
+       onSubmit:async(values) =>{
           var requestdata ={
              doctor_id:props.DoctorId,
              deprtment:values.deprtment,
              post:values.post,
-             Shift_time:values.Shift_time
+             available_time:values.Shift_time
           } 
-          console.log("data is",requestdata);
+          console.log("Data is ",requestdata);
+          setButonvalues("please wait...");
+          const responseApi = await postData("Doctorapi/UpdateShift",requestdata);
+          try {
+            if(responseApi.status === "Ok")
+            {
+                successAlert(responseApi.result);
+                props.getDoctorDetails();
+                props.setShow(false);
+                setButonvalues("Save");
+            }
+            else{
+                errorAlert(responseApi.result);
+                setButonvalues("Save");
+            }
+          } catch (error) {
+             console.log("error");
+             setButonvalues("Save");
+          }
        }
 
    })
@@ -41,7 +56,7 @@ import { ShifSchema } from '../../schemas'
                     <div className="row">
                         <div className="col-md-12 mb-2">
                             <b>Fullname <label htmlFor="" className='text-daner'></label></b>
-                             <input type="text" className='form-control' name="fullname" value={props.name} id="fullname" />
+                             <input type="text" className='form-control' name="fullname" readOnly value={values.name} onBlur={handleBlur} onChange={handleChange} id="fullname" />
                         </div>
                          <div className="col-md-4 mb-2">
                             <b>Deprtment <label htmlFor="" className='text-danger'>{errors.deprtment && touched.deprtment ? errors.deprtment : null}</label></b>
@@ -54,13 +69,15 @@ import { ShifSchema } from '../../schemas'
                         <div className="col-md-4 mb-2">
                             <b>Shift Time <label htmlFor="" className='text-danger'>{errors.Shift_time && touched.Shift_time ? errors.Shift_time : null}</label></b>
                             <select name="Shift_time" id="Shift_time" value={values.Shift_time} onBlur={handleBlur} onChange={handleChange}  className='form-select'>
-                                <option value="">---select Shift Time---</option>
+                                {/* <option value="">---select Shift Time---</option> */}
                                 <option value="Day">Day Shift</option>
                                 <option value="Night">Night Shift</option>
                             </select>
                         </div>
                         <div className='col-md-2 mb-2 mt-3'>
-                            <button type="submit" className='btn btn-primary w-100'>Save</button>
+                            <button type="submit" disabled={Butonvalues !== "Save"} className='btn btn-primary w-100'>
+                                {Butonvalues !== "Save" ? <i className="fa fa-spinner fa-spin"></i>:"Save" }
+                            </button>
                         </div>
                     </div>
                 </div>
