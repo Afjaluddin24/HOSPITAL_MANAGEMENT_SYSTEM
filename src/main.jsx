@@ -22,7 +22,15 @@ import Receptionist from './Adminpanal/Receptionist.jsx'
 import AvailableDoctor from './Adminpanal/AvailableDoctor.jsx'
 
 
+// Reception view
+
+import Navbarres from './Reception/Navbarres.jsx'
+import Dashboardrec from './Reception/Dashboardrec.jsx'
+import Footerrec from './Reception/Footerrec.jsx'
+import Invoicerec from './Reception/Invoicerec.jsx'
+
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+
 
 
 createRoot(document.getElementById('root')).render(
@@ -37,10 +45,18 @@ createRoot(document.getElementById('root')).render(
             {/* Admin View  */}
 
             <Route path='/Admin/Dashboard' element={<><Navbaraddmin/><Dashboard/><Footeradmin/></>} />
-             <Route path='/Admin/Doctor' element={<><Navbaraddmin/><Doctorstaff/><Footeradmin/></>} />
-             <Route path='/Admin/Doctors' element={<><Navbaraddmin/><Doctorslists/><Footeradmin/></>} />
-             <Route path='/Admin/AvailableDoctors' element={<><Navbaraddmin/><AvailableDoctor/><Footeradmin/></>} />
-             <Route path='/Admin/Receptionist' element={<><Navbaraddmin/><Receptionist/><Footeradmin/></>} />
+            <Route path='/Admin/Doctor' element={<><Navbaraddmin/><Doctorstaff/><Footeradmin/></>} />
+            <Route path='/Admin/Doctors' element={<><Navbaraddmin/><Doctorslists/><Footeradmin/></>} />
+            <Route path='/Admin/AvailableDoctors' element={<><Navbaraddmin/><AvailableDoctor/><Footeradmin/></>} />
+            <Route path='/Admin/Receptionist' element={<><Navbaraddmin/><Receptionist/><Footeradmin/></>} />
+
+            {/* Reception View  */}
+            
+            <Route path="/Reception/Home" element={<><Navbarres/><Dashboardrec/><Footerrec/></>} />
+
+
+            <Route path="/Reception/Invoice" element={<><Navbarres/><Invoicerec/><Footerrec/></>} />
+
       </Routes>
   </BrowserRouter>
 )
