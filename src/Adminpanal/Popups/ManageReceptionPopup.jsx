@@ -25,7 +25,7 @@ import { RepMeangeSchema } from '../../schemas';
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                     <div className="modal-header d-flex justify-content-between align-items-center">
-                    <h5 className="modal-title">Package</h5>
+                    <h5 className="modal-title">Reception Shift</h5>
                     <i className="fa-solid fa-xmark" style={{ fontSize: 20, cursor: "pointer" }} onClick={() => props.setShow(false)}></i>
                     </div>
 
@@ -35,12 +35,12 @@ import { RepMeangeSchema } from '../../schemas';
                          <form  onSubmit={handleSubmit} className="row">
                              <div className="col-md-4 mt-2">
                                 <b>Full name<span className='text-danger'></span></b>
-                                <input type="text" name="username" id="username" className='form-control' readOnly value={values.username} onBlur={handleBlur} onChange={handleChange} readOnly />
+                                <input type="text" name="username" id="username" className='form-control' readOnly value={values.username} onBlur={handleBlur} onChange={handleChange}  />
                              </div>
                              <div className="col-md-4 mt-2"></div>
                              <div className="col-md-4 mt-2">
                                  <b>Join Date<span className='text-danger'></span></b>
-                                 <input type="text" name="created_at" id="created_at" className='form-control' readOnly value={values.created_at} onBlur={handleBlur} onChange={handleChange} readOnly />
+                                 <input type="text" name="created_at" id="created_at" className='form-control' readOnly value={values.created_at} onBlur={handleBlur} onChange={handleChange} />
                              </div>
                              <div className="col-md-6 mt-2">
                                 <b>Shift Time <small className="text-danger">{errors.shift_time && touched.shift_time ? errors.shift_time : null}</small></b>

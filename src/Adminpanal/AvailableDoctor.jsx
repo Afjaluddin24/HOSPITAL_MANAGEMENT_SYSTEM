@@ -67,7 +67,7 @@ function AvailableDoctor() {
 
     // 🔹 Run once when component loads
     useEffect(() => {
-        const Token = jwtDecode(localStorage.getItem("Token"));
+        const Token = jwtDecode(localStorage.getItem("Tokena"));
         setMyid(Token.AdminId);
         getListDoctors(Token.AdminId);
     }, []);

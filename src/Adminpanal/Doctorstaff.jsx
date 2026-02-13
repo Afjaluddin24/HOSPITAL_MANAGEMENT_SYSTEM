@@ -126,7 +126,7 @@ import ManageDoctorPopup from './Popups/ManageDoctorPopup';
   }
 
     useEffect(() => {
-       const decodedToken = jwtDecode(localStorage.getItem("Token"));
+       const decodedToken = jwtDecode(localStorage.getItem("Tokena"));
        console.log(decodedToken);
        setMyId(decodedToken.AdminId);
 

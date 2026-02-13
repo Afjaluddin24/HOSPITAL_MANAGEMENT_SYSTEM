@@ -108,7 +108,8 @@ import ManageReceptionPopup from './Popups/ManageReceptionPopup';
                 setinitialValues({
                    username:data.fullname,
                    shift_time:data.shift_time,
-                   department:data.department
+                   department:data.department,
+                   created_at:data.created_at
                 })
                 setrespId(data.receptionist_id)
                 setShow(true);
