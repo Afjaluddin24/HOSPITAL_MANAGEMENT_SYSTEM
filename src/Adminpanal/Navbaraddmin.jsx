@@ -6,7 +6,7 @@ import { warningAlert } from '../Message/SweetAlert';
 function Navbaraddmin() {
 
   const [userName,setUserName] = useState("");  
-  const Tocken =  localStorage.getItem("Token");
+  const Tocken =  localStorage.getItem("Tokena");
   const logOut =  async() => {
     const warningMessage = await warningAlert("Are you sure to logout?");
     if(warningMessage)

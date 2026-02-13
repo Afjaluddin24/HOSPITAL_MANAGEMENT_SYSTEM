@@ -25,16 +25,24 @@ export const DoctorSchema = Yup.object({
     phone:Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("*")
 });
 
+export const ShifSchema = Yup.object({
+    deprtment:Yup.string().required("*"),
+    post:Yup.string().required("*"),
+    Shift_time:Yup.string().required("*")
+});
+
 export const ReceptionistSchema  = Yup.object({
      username:Yup.string().required("*"),
      email:Yup.string().email("Invalid email format").required("*"),
      phone:Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("*"),
      shift_time:Yup.string().required("*"),
-     address:Yup.string().required("*")
+     address:Yup.string().required("*"),
+     department:Yup.string().required("*")
 });
 
-export const ShifSchema = Yup.object({
-    deprtment:Yup.string().required("*"),
-    post:Yup.string().required("*"),
-    Shift_time:Yup.string().required("*")
+
+
+export const RepMeangeSchema = Yup.object({
+   shift_time:Yup.string().required("*"),
+   department:Yup.string().required("*")
 })

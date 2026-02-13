@@ -1,7 +1,36 @@
-import React from 'react'
+import { jwtDecode } from 'jwt-decode';
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
  function Navbarres() {
+  const Tocens = localStorage.getItem("Tokenrr");
+  const [username,setUsername] = useState("");
+
+  console.log(Tocens);
+
+  useEffect(()=>{
+    if(Tocens)
+    {
+      const dcodetoacn = jwtDecode(Tocens);
+      
+     console.log("Data is",dcodetoacn);
+     setUsername(dcodetoacn.sub);
+     // auto logout time over 
+
+     const expiryTime = dcodetoacn.exp * 1000;
+        const currentTime = Date.now();
+        const remainingMs = expiryTime - currentTime;
+        const remainingMinutes = Math.floor(remainingMs / 60000);
+        const remainingSeconds = Math.floor((remainingMs % 60000) / 1000);
+        //  console.log(`Token expires in ${remainingMinutes} min ${remainingSeconds} sec`);
+        
+        setTimeout(() => {
+          warningAlert("Session expired. Please login again.");
+          localStorage.removeItem("Tokenrr");
+          window.location.href = "/Login";
+        }, remainingMs);
+    }
+  },[]);
   return (
   <nav className="navbar navbar-expand-lg navbar-dark bg-success">
   <div className="container-fluid">
@@ -146,7 +175,7 @@ import { Link } from 'react-router-dom';
 
         <li className="nav-item">
           <span className="nav-link text-warning fw-bold">
-            <i className="fa fa-user" /> Welcome, Afjal
+            <i className="fa fa-user" /> Welcome, {username}
           </span>
         </li>
         <li className="nav-item">

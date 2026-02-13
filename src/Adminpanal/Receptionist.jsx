@@ -6,15 +6,19 @@ import { getData, postData } from '../APIConfig/ConfigAPI';
 import { jwtDecode } from 'jwt-decode';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import ManageReceptionPopup from './Popups/ManageReceptionPopup';
 
  function Receptionist() {
-    
+    const [show,setShow] = useState(false);
+    const [respId,setrespId] = useState(0);
     const [initialValues,setinitialValues] = useState({
         username:"",
         email:"",
         phone:"",
         shift_time:"",
-        address:""
+        address:"",
+        department:"",
+        created_at:""
     });
 
    
@@ -36,7 +40,8 @@ import { Column } from 'primereact/column';
               email:values.email,
               phone:String(values.phone),
               shift_time:values.shift_time,
-              address:values.address
+              address:values.address,
+              department:values.department
            }
            console.log("Request Data",requestData);
            setButtonvalues("Please Wait...");
@@ -67,6 +72,7 @@ import { Column } from 'primereact/column';
             {
                 const data = responseAPI.result;
                 setReceptionistDetails(data);
+                // console.log(data);
             }
             else{
                 errorAlert(responseAPI.result);
@@ -93,10 +99,32 @@ import { Column } from 'primereact/column';
           item.fullname?.toLowerCase().includes(searchText.toLowerCase())
     );
 
+    const SearchReception = async(Id) =>{
+        try {
+           const reponseApi = await getData("Receptionistapi/getReceptionist/" + Id);
+           if(reponseApi.status === "Ok")
+            {
+                const data = reponseApi.result;
+                setinitialValues({
+                   username:data.fullname,
+                   shift_time:data.shift_time,
+                   department:data.department
+                })
+                setrespId(data.receptionist_id)
+                setShow(true);
+            } 
+            else{
+                console.log("Data not Found".reponseApi.result);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
 
     useEffect(() => {
-     const decodedToken = jwtDecode(localStorage.getItem("Token"));
+     const decodedToken = jwtDecode(localStorage.getItem("Tokena"));
      console.log(decodedToken);
      setMyid(decodedToken.AdminId);
 
@@ -128,6 +156,26 @@ import { Column } from 'primereact/column';
                                    <b>Phone No <small className='text-danger'>{errors.phone && touched.phone ? errors.phone : null}</small></b>
                                    <input type="text" id='phone' name='phone' value={values.phone} onChange={handleChange} onBlur={handleBlur} className='form-control' placeholder='Receptionist Phone'/>
                                 </div>
+                                <div className="col-md-4 mt-2">
+                                   <b>Reception Post<small className='text-danger'>{errors.department && touched.department ? errors.department : null}</small></b>
+                                    <select 
+                                        name="department" 
+                                        id='department'
+                                        className="form-select"
+                                        value={values.department}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    >
+                                        <option value="">-- Select Post --</option>
+                                        <option value="Lab Receptionist">Lab Receptionist</option>
+                                        <option value="OPD Receptionist">OPD Receptionist</option>
+                                        <option value="Emergency Receptionist">Emergency Receptionist</option>
+                                        <option value="Front Desk Executive">Front Desk Executive</option>
+                                        <option value="Billing Receptionist">Billing Receptionist</option>
+                                        <option value="Admission Desk">Admission Desk</option>
+                                    </select>
+                                </div>
+
                                 <div className="col-md-4 mt-2">
                                  <b>Shift Time <small className="text-danger">{errors.shift_time && touched.shift_time ? errors.shift_time : null}</small></b>
                                     <select id="shift_time" name="shift_time" value={values.shift_time} onChange={handleChange} onBlur={handleBlur} className="form-select">
@@ -191,6 +239,7 @@ import { Column } from 'primereact/column';
                                             </>
                                          } />
                                     <Column field="shift_time" sortable  header="Shift Time" />
+                                    <Column field="department" sortable  header="Post" />
                                     <Column field="address" header="Address" />
                                     {/* Date column with dd/mm/yyyy format */}
                                     <Column 
@@ -216,10 +265,22 @@ import { Column } from 'primereact/column';
                                             </div>
                                     )}
                                     />
+                                    <Column
+                                        header="Action"
+                                        body={(rowData) => (
+                                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                 <i className="fa-solid fa-pen-to-square fa-xl text-primary"onClick={() => SearchReception(rowData.receptionist_id)} ></i>
+                                            </div>
+                                    )}
+                                    />
                     </DataTable>
                 </div>
             </div>
+            <ManageReceptionPopup show={show} setShow={setShow} 
+            initialValues={initialValues} s={setinitialValues} 
+             respId={respId} setrespId={setrespId} />
         </div>
+        
   )
 }
 export default Receptionist

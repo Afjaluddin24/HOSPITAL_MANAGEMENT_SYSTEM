@@ -33,20 +33,20 @@ function Otpvarification() {
 
                     if(Apireponse.role === "Doctor")
                     {
-                        localStorage.setItem("Tokenr",Apireponse.token);
+                        localStorage.setItem("Tokenrd",Apireponse.token);
                         setTimeout(() => {
                             window.location.href = "/Doctor/Dashboard";
                         },2000);
                     }
                     else if(Apireponse.role === "Receptionist")
                     {
-                        localStorage.setItem("Tokenr",Apireponse.token);
+                        localStorage.setItem("Tokenrr",Apireponse.token);
                         setTimeout(() => {
-                            window.location.href = "/Staff/Dashboard";
+                            window.location.href = "/Reception/Home";
                         },2000);
                     }
                     else{
-                         localStorage.setItem("Token",Apireponse.token);
+                         localStorage.setItem("Tokena",Apireponse.token);
                          setTimeout(() => {
                             window.location.href = "/Admin/Dashboard";
                         },2000);
