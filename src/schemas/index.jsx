@@ -46,3 +46,11 @@ export const RepMeangeSchema = Yup.object({
    shift_time:Yup.string().required("*"),
    department:Yup.string().required("*")
 })
+
+export const Patientchema = Yup.object({
+    fullname:Yup.string().required("*"),
+    phone:Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("*"),
+    age:Yup.string().required("*"),
+    gender:Yup.string().required("*"),
+    Adress:Yup.string().required("*")
+})

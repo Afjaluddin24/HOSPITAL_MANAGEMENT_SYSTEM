@@ -6,14 +6,10 @@ import { Link } from 'react-router-dom';
   const Tocens = localStorage.getItem("Tokenrr");
   const [username,setUsername] = useState("");
 
-  console.log(Tocens);
-
   useEffect(()=>{
     if(Tocens)
     {
       const dcodetoacn = jwtDecode(Tocens);
-      
-     console.log("Data is",dcodetoacn);
      setUsername(dcodetoacn.sub);
      // auto logout time over 
 
