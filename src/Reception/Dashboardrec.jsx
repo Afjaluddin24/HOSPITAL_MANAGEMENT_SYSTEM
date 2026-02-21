@@ -75,7 +75,7 @@ import React from 'react'
   {/* ================= TABLE ================= */}
   <div className="card shadow mt-5">
 
-    <div className="card-header bg-success text-white text-center">
+    <div className="card-header bg-success text-white text-start">
       <i className="fa fa-user-doctor me-2"></i>
       On Duty Doctors
     </div>

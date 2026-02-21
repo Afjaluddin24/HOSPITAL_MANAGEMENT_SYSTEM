@@ -28,6 +28,7 @@ import Navbarres from './Reception/Navbarres.jsx'
 import Dashboardrec from './Reception/Dashboardrec.jsx'
 import Footerrec from './Reception/Footerrec.jsx'
 import Invoicerec from './Reception/Invoicerec.jsx'
+import Patientrec from './Reception/Patientrec.jsx'
 
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 
@@ -53,6 +54,7 @@ createRoot(document.getElementById('root')).render(
             {/* Reception View  */}
             
             <Route path="/Reception/Home" element={<><Navbarres/><Dashboardrec/><Footerrec/></>} />
+            <Route path="/Reception/Patients" element={<><Navbarres/><Patientrec/><Footerrec/></>} />
 
 
             <Route path="/Reception/Invoice" element={<><Navbarres/><Invoicerec/><Footerrec/></>} />

@@ -72,7 +72,15 @@ import { Link } from 'react-router-dom';
         </a>
 
         <ul className="dropdown-menu dropdown-menu-end">
-
+           <li>
+            <Link to="/Reception/Patients" className="dropdown-item" >
+                <img src="../Myimage/patients.png" alt="" width={25}  />&nbsp;
+                New Patients
+            </Link>
+            </li>
+             <li>
+            <hr className="dropdown-divider" />
+            </li>
             <li>
             <a className="dropdown-item" href="#">
                 <i className="fa fa-user-check me-2 text-primary"></i>
