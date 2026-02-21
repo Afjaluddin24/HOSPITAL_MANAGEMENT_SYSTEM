@@ -22,7 +22,7 @@ import { jwtDecode } from 'jwt-decode';
      validationSchema:Patientchema,
      onSubmit:async(values) =>{
        var requestdata ={
-         receptionist_id:6,
+         receptionist_id:Id,
          fullname:values.fullname,
          address:values.Adress,
          Email:values.Email,
@@ -38,7 +38,7 @@ import { jwtDecode } from 'jwt-decode';
   useEffect(()=>{
      const datad = jwtDecode(localStorage.getItem("Tokenrr"));
      setId(datad.receptionist_id);
-     console.log("Id is",datad.receptionist_id);
+     console.log("Id is",datad.AdminId);
   },[])
   return ( 
     <>
