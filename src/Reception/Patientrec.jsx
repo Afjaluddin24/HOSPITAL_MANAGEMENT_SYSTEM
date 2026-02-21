@@ -3,9 +3,11 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { Patientchema } from '../schemas';
 import { string } from 'yup';
+import { jwtDecode } from 'jwt-decode';
 
  function Patientrec() {
   const [Buttonvalue,setButtonvalue] = useState("Save");
+  const [Id,setId] = useState(0);
   const [initialValues,setinitialValues] = useState({
      fullname:"",
      Email:"",
@@ -34,7 +36,9 @@ import { string } from 'yup';
   })  
 
   useEffect(()=>{
-
+     const datad = jwtDecode(localStorage.getItem("Tokenrr"));
+     setId(datad.receptionist_id);
+     console.log("Id is",datad.receptionist_id);
   },[])
   return ( 
     <>
