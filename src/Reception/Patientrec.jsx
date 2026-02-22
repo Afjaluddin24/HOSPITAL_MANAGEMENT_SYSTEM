@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Patientchema } from '../schemas';
 import { string } from 'yup';
 import { jwtDecode } from 'jwt-decode';
+import { postData } from '../APIConfig/ConfigAPI';
+import { errorAlert, successAlert, warningAlert } from '../Message/SweetAlert';
 
  function Patientrec() {
   const [Buttonvalue,setButtonvalue] = useState("Save");
@@ -14,7 +16,9 @@ import { jwtDecode } from 'jwt-decode';
      phone:"",
      age:"",
      gender:"",
-     Adress:""
+     Adress:"",
+     Attendant:"",
+     Attendanttwo:""
   });
 
   const {values,errors,handleBlur,handleChange,touched,handleSubmit,resetForm}  =  useFormik({
@@ -22,23 +26,39 @@ import { jwtDecode } from 'jwt-decode';
      validationSchema:Patientchema,
      onSubmit:async(values) =>{
        var requestdata ={
-         receptionist_id:Id,
+         receptionist_id:parseInt(Id),
          fullname:values.fullname,
          address:values.Adress,
          Email:values.Email,
-         phone:string(values.phone),
+         phone:values.phone,
          age:values.age,
-         gender:values.gender
+         gender:values.gender,
+         Attendantone:values.Attendant,
+         Attendanttwo:values.Attendanttwo
        }
-       console.log(requestdata);
+       console.log("Data is",requestdata);
        setButtonvalue("Paslis waite...")
+       const responsApi = await postData("Patient/newPatient",requestdata);
+       try{
+         if(responsApi.status === "Ok")
+         {
+            successAlert(responsApi.result);
+            setButtonvalue("Save");
+         }
+         else{
+            errorAlert(responsApi.result);
+            setButtonvalue("Save");
+         }
+       } catch (error) {
+        errorAlert(error);
+        setButtonvalue("Save");
+       }
      }
   })  
 
   useEffect(()=>{
      const datad = jwtDecode(localStorage.getItem("Tokenrr"));
-     setId(datad.receptionist_id);
-     console.log("Id is",datad.AdminId);
+     setId(datad.AdminId);
   },[])
   return ( 
     <>
@@ -52,16 +72,16 @@ import { jwtDecode } from 'jwt-decode';
             <form onSubmit={handleSubmit} className="col-md-12">
                 <div className="row">
                     <div className="col-md-6 mt-2">
-                        <b>fullname<label htmlFor="" className='text-danger'>{errors.fullname && touched.fullname ? errors.fullname :null}</label></b>
+                        <b>Full name<label htmlFor="" className='text-danger'>{errors.fullname && touched.fullname ? errors.fullname :null}</label></b>
                         <input type="text" name="fullname" id="fullname" value={values.fullname} onBlur={handleBlur} onChange={handleChange} className='form-control' />
                     </div>
                     <div className="col-md-6 mt-2">
-                        <b>Email<label htmlFor="" className='text-danger'> {errors.Email && touched.Email ? errors.Email :null}</label></b>
+                        <b>Email<label htmlFor="" className='text-danger'></label></b>
                         <input type="email" name="Email" id="Email" value={values.Email} onBlur={handleBlur} onChange={handleChange} className='form-control' />
                     </div>
                     <div className="col-md-4 mt-2">
                         <b>Phone<label htmlFor="" className='text-danger'>{errors.phone && touched.phone ? errors.phone :null}</label></b>
-                        <input type="number" name="phone" id="phone" value={values.phone} onBlur={handleBlur} onChange={handleChange} className='form-control' />
+                        <input type="text" name="phone" id="phone" value={values.phone} onBlur={handleBlur} onChange={handleChange} className='form-control' />
                     </div>
                       <div className="col-md-4 mt-2">
                         <b>Age<label htmlFor="" className='text-danger'>{errors.age && touched.age ? errors.age :null}</label></b>
@@ -74,6 +94,14 @@ import { jwtDecode } from 'jwt-decode';
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
+                    </div>
+                    <div className="col-md-4 mt-2">
+                        <b>Family Attendant name<label htmlFor="" className='text-danger'>{errors.Attendant && touched.Attendant ? errors.Attendant :null}</label></b>
+                        <input type="text" name="Attendant" id="Attendant" value={values.Attendant} onBlur={handleBlur} onChange={handleChange} className='form-control' />
+                    </div>
+                    <div className="col-md-4 mt-2">
+                        <b>Family Attendant name<label htmlFor="" className='text-danger'></label></b>
+                        <input type="text" name="Attendanttwo" id="Attendanttwo" value={values.Attendanttwo} onBlur={handleBlur} onChange={handleChange} className='form-control' />
                     </div>
                      <div className="col-md-4 mt-2">
                         <b>Adress<label htmlFor="" className='text-danger'>{errors.Adress && touched.Adress ? errors.Adress :null}</label></b>

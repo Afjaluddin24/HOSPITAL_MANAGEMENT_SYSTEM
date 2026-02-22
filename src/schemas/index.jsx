@@ -52,5 +52,6 @@ export const Patientchema = Yup.object({
     phone:Yup.string().matches(/^[0-9]{10}$/, "Phone number must be 10 digits").required("*"),
     age:Yup.string().required("*"),
     gender:Yup.string().required("*"),
-    Adress:Yup.string().required("*")
+    Adress:Yup.string().required("*"),
+    Attendant:Yup.string().required("*")
 })
