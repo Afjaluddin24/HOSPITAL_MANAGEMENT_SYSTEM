@@ -54,9 +54,9 @@ import { Link } from 'react-router-dom';
     <div className="collapse navbar-collapse" id="navbarMenu">
       <ul className="navbar-nav ms-auto align-items-lg-center gap-lg-3">
         <li className="nav-item">
-          <a className="nav-link text-white" href="#">
+          <Link className="nav-link text-white" to="/Reception/Home">
             <i className="fa fa-chart-line" /> Dashboard
-          </a>
+          </Link>
         </li>
        <li className="nav-item dropdown">
         <a

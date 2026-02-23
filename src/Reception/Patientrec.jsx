@@ -4,12 +4,16 @@ import { useState } from 'react';
 import { Patientchema } from '../schemas';
 import { string } from 'yup';
 import { jwtDecode } from 'jwt-decode';
-import { postData } from '../APIConfig/ConfigAPI';
+import { getData, postData } from '../APIConfig/ConfigAPI';
 import { errorAlert, successAlert, warningAlert } from '../Message/SweetAlert';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
  function Patientrec() {
   const [Buttonvalue,setButtonvalue] = useState("Save");
   const [Id,setId] = useState(0);
+  const [Patients,setPatients] = useState([]);
+
   const [initialValues,setinitialValues] = useState({
      fullname:"",
      Email:"",
@@ -56,9 +60,27 @@ import { errorAlert, successAlert, warningAlert } from '../Message/SweetAlert';
      }
   })  
 
+  const getPatiens = async (id) =>{
+     const responseApi = await getData("Patient/displayPatient/" + id)
+     try {
+        if(responseApi.status === "Ok")
+        {
+            setPatients(responseApi.result);
+            console.log("Data is",responseApi.result);
+        }
+        else{
+            setPatients(responseApi.result);
+            console.log("Data Not Fond",responseApi.result);
+        }
+     } catch (error) {
+        console.log(error);
+     }
+  } 
+
   useEffect(()=>{
      const datad = jwtDecode(localStorage.getItem("Tokenrr"));
      setId(datad.AdminId);
+     getPatiens(datad.AdminId);
   },[])
   return ( 
     <>
@@ -121,6 +143,37 @@ import { errorAlert, successAlert, warningAlert } from '../Message/SweetAlert';
                     </div>
                 </div>
             </form>
+
+            <div className="col-md-10 m-auto mt-3">
+                <div className="row">
+                    <div className="col-md-4">
+                        
+                    </div>
+
+                    <div className="col-md-12 mt-2">
+                        <DataTable value={Patients} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+                            <Column  header="Details" body={(data) =>
+                                <>
+                                <h5>{data.fullname}</h5>
+                                <h6>{data.gender}</h6>
+                                <b><i className="fa-solid fa-phone" style={{color: "#0d6efd"}}></i>&nbsp;{data.phone}</b>
+                                </>
+                            } />
+                            <Column body={(o)=>
+                              <>
+                                <b>{o.attendantone}</b>
+                                <b>{o.attendanttwo}</b>
+                              </>
+                            } sortable header="attendant" />
+                            <Column field="address" sortable header="Address" />
+                            <Column field="phone" sortable header="Phone" />
+                            {/* <Column header="Action" body={(rowData) => (
+                            <i className="fa-solid fa-pen-to-square fa-xl" onClick={() => cheneShift(rowData.doctor_id)}></i>
+                            )} /> */}
+                        </DataTable>
+                    </div>
+                </div>
+            </div>
         </div>
       </div>
     </div>

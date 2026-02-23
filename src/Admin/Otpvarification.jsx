@@ -27,7 +27,7 @@ function Otpvarification() {
             try {
                 if(Apireponse.status === "Ok")
                 {
-                    warningAlert(Apireponse.result,"User warking in 60 minutes session only, after that you need to login again.");
+                    successAlert(Apireponse.result,"User warking in 60 minutes session only, after that you need to login again.");
                     setInitialValues("Verify OTP");
                     console.log("Role is",Apireponse.role);
 

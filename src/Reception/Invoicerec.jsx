@@ -24,7 +24,7 @@ import React from 'react'
 
             {/* Right Side - Plus Icon */}
             <div className="col-md-4 text-end">
-               <button type="button" className='btn btn-info'><span className='text-white'><i className="fa-solid fa-plus fa-lg"></i> Pasents</span></button>
+               <button type="button" className='btn btn-info'><span className='text-white'><i className="fa-solid fa-plus fa-lg"></i> Patients</span></button>
             </div>
 
          </div>
